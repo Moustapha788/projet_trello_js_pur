@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet trello clone</title>
+    <!-- ! lien css _ animation et _ font-awesome  -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+    <!-- * ombre -->
+    <!-- <p class="ombre"></p> -->
+
+    <!-- header -->
+    <header id="header">
+
+    </header>
+    <!-- main -->
+    <main id="main">
+        <!-- menu  des cartes -->
+        <div id="nav-task">
+            <button class="btn-add">Ajouter une note</button>
+            <button class="btn-add">Ajouter une colonne</button>
+        </div>
+        <!-- les cartes vont être dans cette section  -->
+        <section id="task-dashboard">
+            <!-- * une colonne -->
+            <div class="colonne bgcolor">
+                <!-- * une titre de colonne -->
+                <h1 class="title-col">
+                    <marquee behavior="alternate" direction="">colonne 1 </marquee>
+                </h1>
+                <!-- * liste de notes -->
+                <aside class="liste-de-notes">
+                    <!-- * une note  -->
+                    <div class="note">
+                        <p class="title-note">cllcllc lo</p>
+                        <article class="note-information">
+                            <div class="info-title-note">
+                                <h1>ff</h1>
+                                <span class="btn-close-note"><i class="fa-solid fa-xmark fa-4x"></i></span>
+                            </div>
+                            <form action="" class="note-form">
+                                <div class="form-control">
+                                    <label for="">Tâche</label>
+                                    <textarea name="" id="" class="theNoteText"></textarea>
+                                </div>
+
+                                <div class="form-control">
+                                    <label for="">Date</label>
+                                    <input type="date">
+                                </div>
+                                <div class="form-control">
+                                    <label for="">Heure de Début</label>
+                                    <input type="time">
+                                </div>
+                                <div class="form-control">
+                                    <label for="">Heure de Fin</label>
+                                    <input type="date">
+                                </div>
+                                <button type="submit" class="btnSaveNote"> Ajouter</button>
+                            </form>
+                        </article>
+                    </div>
+                </aside>
+            </div>
+
+        </section>
+    </main>
+    <!-- side nav  -->
+    <nav id="main-nav">
+        <!-- bouton  d'ouverture et de fermetture du side nav    -->
+        <button id="btn-main-nav">
+
+        </button>
+        <!-- side nav content -->
+        <div>
+
+        </div>
+
+    </nav>
+
+    <!-- ! lien js -->
+    <script src="script.js"></script>
+</body>
+
+</html>
