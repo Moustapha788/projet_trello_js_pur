@@ -58,10 +58,35 @@
         </button>
         <!-- side nav content -->
         <div class="side-nav-content ">
-
+            <a href="#" class="fonctionnalite">
+                <span><i class="fa-solid fa-floppy-disk fa-3x"></i></span>
+                <p>Sauvegarder état Trello</p>
+            </a>
+            <a href="#" class="fonctionnalite">
+                <span><i class="fa-solid fa-list-check fa-3x"></i></span>
+                <p>Lister les états</p>
+            </a>
+            <div class="auto_save">
+                <label for="autosave">Auto-save</label>
+                <input type="checkbox" name="autosave" id="autosave">
+                <label for="autosave"></label>
+            </div>
         </div>
     </nav>
-
+    <aside id="trash-aside">
+        <!-- bouton  d'ouverture et de fermetture de la partie corbeilles    -->
+        <button id="btn-trash">
+            <i class="fa-solid fa-chevron-left fa-4x"></i>
+        </button>
+        <div class="side-right-trash">
+            <h1>
+                <small><i class="fa-solid fa-trash-can fa-2x"></i></small>
+                <small>Corbeille</small>
+            </h1>
+        </div>
+        <section class="corbeille">
+        </section>
+    </aside>
     <!-- ! lien js -->
     <script defer src="script.js"></script>
 </body>

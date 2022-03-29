@@ -4,6 +4,7 @@
 Récupération des éléments globaux
 */
 const body = document.querySelector("body");
+const btnTrash = document.querySelector("#btn-trash");
 const ombre = document.querySelector(".ombre");
 const downDOM = document.getElementById("downDOM");
 const btnMainNav = document.getElementById("btn-main-nav");
@@ -29,7 +30,10 @@ const tabColors = [
     "rgb(210, 218, 226)",
     "rgb(0, 128, 128)",
     "rgb(220, 20, 60)",
-    "rgb(173, 216, 230)"
+    "rgb(173, 216, 230)",
+    "rgb(30, 39, 46)",
+    "rgb(255, 168, 1)",
+    "rgb(44, 44, 84)"
 ];
 
 /* 
@@ -47,9 +51,10 @@ Le DOM
 */
 
 downDOM.addEventListener("click", DownAndUpDOM);
-/* 
-menu vertical
-*/
+btnTrash.addEventListener("click", TrashAsideShow)
+    /* 
+    menu vertical
+    */
 btnMainNav.addEventListener("click", () => mainNav.classList.toggle("showMainNav"));
 
 /* 
@@ -101,6 +106,11 @@ function DownAndUpDOM() {
     main.classList.toggle("pendule")
 
 }
+
+function TrashAsideShow() {
+    this.parentElement.classList.toggle("showTrashAside");
+    this.firstElementChild.classList.toggle("fa-chevron-right");
+}
 // ! indisponibiliser
 function indisponibiliser() {
     if (taskDashboard.children.length === 0) {
@@ -144,6 +154,8 @@ function createTask(params) {
     });
     /* création des éléments */
     const note = document.createElement("div");
+    const smallEdit = document.createElement("small");
+    const iOfSmall = document.createElement("i");
     const titleNoteP = document.createElement("p");
     const article = document.createElement("article");
     const infoTitleNoteDiv = document.createElement('div');
@@ -236,7 +248,7 @@ function createTask(params) {
     ! events about note 
     */
     textArreaNote.select();
-    note.addEventListener("click", showNote)
+    // note.addEventListener("click", showNote)
     note.addEventListener("dblclick", chooseNote)
     note.addEventListener("dragstart", dragStartNote);
     note.addEventListener("dragend", dragEndNote);
@@ -318,9 +330,8 @@ function createColumn() {
 
     /* ajout de style (attributs class et id) */
     const bgcolor = tabColors[randomColor()];
-    column.classList.add("colonne");
+    column.classList.add("colonne", "animate__backInDown");
     column.setAttribute("id", `col${ id + 1 }`);
-    // column.setAttribute("draggable", "true");
     column.style.backgroundColor = bgcolor;
     h1.className = "title-col";
     marquee.setAttribute("behavior", "alternate");
@@ -335,12 +346,42 @@ function createColumn() {
     /*
     ! events about column
     */
+    h1.addEventListener("dblclick", modifierTitreColonne)
     column.addEventListener("dblclick", selectTheColumn)
     return column;
 }
 
+function refleshColumn() {
+    const myColumns = document.querySelectorAll(".colonne");
+    myColumns.forEach((col, i) => {
+        col.setAttribute("id", `col${ i + 1 }`);
+        col.firstElementChild.firstElementChild.innerHTML = `colonne${i+1}`;
+        // if (col.firstElementChild.firstElementChild.innerHTML === `colonne${i}`) {
+        //     col.firstElementChild.firstElementChild.innerHTML = `colonne${i+1}`;
+        // }
+    });
+}
+// ! modifierTitreColonne
+function modifierTitreColonne(e) {
+    e.stopPropagation();
+    const text = document.createElement('input');
+    this.appendChild(text);
+    text.value = this.firstElementChild.innerHTML;
+    const textSiVide = text.value;
+    this.firstElementChild.innerHTML = "";
+    text.className = "modificationColonne"
+    text.focus();
+    text.addEventListener("blur", (e) => {
+        this.firstElementChild.innerHTML = text.value;
+        if (this.firstElementChild.innerHTML.trim() === "") {
+            this.firstElementChild.innerHTML = textSiVide;
+        }
+        e.target.parentElement.removeChild(e.target);
+    });
+}
 // ! selectTheColumn
-function selectTheColumn() {
+function selectTheColumn(e) {
+    e.stopPropagation();
     this.classList.toggle("selected");
     setTimeout(() => {
         this.classList.remove("selected");
@@ -349,23 +390,42 @@ function selectTheColumn() {
 // ! randomColor
 function randomColor() {
     const len = tabColors.length;
-    var pos = Math.floor(Math.random() * (len));
+    var pos = Math.floor(Math.random() * len);
     if (taskDashboard.length > 0) {
         do {
-            var pos = Math.floor(Math.random() * (len));
+            var pos = Math.floor(Math.random() * len);
         } while (taskDashboard.lastElementChild.style.backgroundColor === tabColors[pos]);
     }
     return pos;
 }
 // ! deleteTheColumn
 function deleteTheColumn() {
-    let listsOfColumnsSelected = document.querySelectorAll(".selected");
-    for (const column of listsOfColumnsSelected) {
-        taskDashboard.removeChild(column);
-        indisponibiliser();
-        indispoDelTask();
 
+    let listsOfColumns = document.querySelectorAll(".colonne");
+    let listsOfColumnsSelected = document.querySelectorAll(".selected");
+    for (let i = 0; i < listsOfColumnsSelected.length; i++) {
+        if (listsOfColumnsSelected[i].id === "col1" && listsOfColumns.length > 1) {
+            return false;
+        } else {
+            taskDashboard.removeChild(listsOfColumnsSelected[i]);
+            refleshColumn();
+            indisponibiliser();
+            indispoDelTask();
+        }
     }
+    // if (listsOfColumns.length === 1) { return false } else {
+
+    // }
+    // for (const column of listsOfColumnsSelected) {
+    //     if (column.id = "col1") {
+    //         alert("ok");
+    //     } else {
+    //         console.log(column.id);
+    //         taskDashboard.removeChild(column);
+    //         indisponibiliser();
+    //         indispoDelTask();
+    //     }
+    // }
 }
 // ! deleteTheTask
 function deleteTheTask() {
