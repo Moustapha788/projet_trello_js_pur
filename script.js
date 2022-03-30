@@ -5,6 +5,10 @@ Récupération des éléments globaux
 */
 const body = document.querySelector("body");
 const btnTrash = document.querySelector("#btn-trash");
+const modalInfo = document.querySelector("#modal_info");
+const btnCloseNote = document.querySelector(".btn-close-note");
+const btnSaveNote = document.querySelector(".btnSaveNote");
+const noteForm = document.querySelector(".note-form");
 const ombre = document.querySelector(".ombre");
 const downDOM = document.getElementById("downDOM");
 const btnMainNav = document.getElementById("btn-main-nav");
@@ -15,8 +19,8 @@ const addTask = document.getElementById("add-Task");
 const addColumn = document.getElementById("add-Column");
 const deleteColumn = document.getElementById('delete-Column');
 const deleteTask = document.getElementById('delete-task');
-const taskDashboard = document.getElementById('task-dashboard')
-const listeDesNotes = document.querySelectorAll(".liste-des-notes");
+const taskDashboard = document.getElementById('task-dashboard');
+// const listeDesNotes = document.querySelectorAll(".liste-des-notes");
 const tabColors = [
     "rgb(52, 73, 94)",
     "rgb(241, 196, 15)",
@@ -69,21 +73,32 @@ addColumn.addEventListener('click', () => {
 /* 
 ajouter une note 
 */
-addTask.addEventListener('click', () => {
+addTask.addEventListener('click', () => modalInfo.classList.add("open"));
+btnSaveNote.addEventListener("click", () => {
+    var planning = getInfos();
+    /* si les données ne sont pas valides alors ne continue pas */
+    if (!validAdding(noteForm, planning)) { return false; }
     let firstColumn = document.querySelector(".colonne");
     var task = createTask();
     firstColumn.lastElementChild.appendChild(task);
-    const theNotes = document.querySelectorAll(".note");
-    theNotes.forEach(note => {
-        const listsOfNotes = document.querySelectorAll(".liste-des-notes");
-        for (const list of listsOfNotes) {
-            list.addEventListener("dragover", dragOverTask);
-            list.addEventListener("dragenter", dragEnterTask);
-            list.addEventListener("dragleave", dragLeaveTask);
-            list.addEventListener("drop", e => dragDropTask(e, note));
-        }
-    });
+    remplirTache(task, planning);
+    cleanTheForm();
+    modalInfo.classList.remove("open");
     indispoDelTask();
+});
+
+function remplirTache(task, planning) {
+    const lignes = task.querySelectorAll("table tr td");
+    task.firstElementChild.innerHTML = planning[0];
+    lignes[0].innerHTML = planning[1];
+    lignes[1].innerHTML = planning[2];
+    lignes[2].innerHTML = planning[3];
+    lignes[3].innerHTML = planning[4];
+}
+
+btnCloseNote.addEventListener('click', e => {
+    cleanTheForm();
+    modalInfo.classList.remove("open");
 });
 /* 
 supprimer une colonne 
@@ -128,6 +143,7 @@ function indisponibiliser() {
         addColumn.classList.remove('indisponible');
     }
 }
+
 // ! indispoDelTask
 function indispoDelTask() {
     const listesDeNotes = document.querySelectorAll(".liste-des-notes");
@@ -139,152 +155,150 @@ function indispoDelTask() {
         deleteTask.classList.add('indisponible');
     } else {
         deleteTask.classList.remove('indisponible');
-
     }
 }
 
 // ! createTask
-function createTask(params) {
+function createTask() {
 
     const listesDeNotes = document.querySelectorAll(".liste-des-notes");
-    // console.log(listesDeNotes.children);
     var nbrNotes = 0;
     listesDeNotes.forEach(liste => {
         nbrNotes += liste.children.length;
     });
+
     /* création des éléments */
     const note = document.createElement("div");
+    const titleNoteP = document.createElement("p");
     const smallEdit = document.createElement("small");
     const iOfSmall = document.createElement("i");
-    const titleNoteP = document.createElement("p");
-    const article = document.createElement("article");
-    const infoTitleNoteDiv = document.createElement('div');
-    const h1Title = document.createElement("h1");
-    const btnCloseNoteSpan = document.createElement('span');
-    const iBtnClose = document.createElement("i");
-    const form = document.createElement("form");
-    const formCntrl1 = document.createElement("div");
-    const formCntrl2 = document.createElement("div");
-    const formCntrl3 = document.createElement("div");
-    const formCntrl4 = document.createElement("div");
-    const label1 = document.createElement('label');
-    const label2 = document.createElement('label');
-    const label3 = document.createElement('label');
-    const label4 = document.createElement('label');
-    const textArreaNote = document.createElement('textarea');
-    const input1 = document.createElement("input");
-    const input2 = document.createElement("input");
-    const input3 = document.createElement("input");
-    const btnAjouter = document.createElement('button');
 
+    const IconsP = document.createElement("p");
+    const btnArrowLeft = document.createElement("button");
+    const btnArrowRight = document.createElement("button");
+    const arrowLeft = document.createElement("i");
+    const arrowRight = document.createElement("i");
+
+    const overviewDiv = document.createElement("div");
+    const table = document.createElement("table");
+    overviewDiv.appendChild(table);
+
+    const trDateDebut = document.createElement("tr");
+    const thDateDebut = document.createElement("th");
+    thDateDebut.innerHTML = "Date de début";
+    const tdDateDebut = document.createElement("td");
+    [thDateDebut, tdDateDebut].forEach(data => { trDateDebut.appendChild(data) });
+
+    const trDateFin = document.createElement("tr");
+    const thDateFin = document.createElement("th");
+    thDateFin.innerHTML = "Date de fin";
+    const tdDateFin = document.createElement("td");
+    [thDateFin, tdDateFin].forEach(data => { trDateFin.appendChild(data) });
+
+    const trHeureDebut = document.createElement("tr");
+    const thHeureDebut = document.createElement("th");
+    thHeureDebut.innerHTML = "Heure de début";
+    const tdHeureDebut = document.createElement("td");
+    [thHeureDebut, tdHeureDebut].forEach(data => { trHeureDebut.appendChild(data) });
+
+
+    const trHeureFin = document.createElement("tr");
+    const thHeureFin = document.createElement("th");
+    thHeureFin.innerHTML = "Heure de fin";
+    const tdHeureFin = document.createElement("td");
+    [thHeureFin, tdHeureFin].forEach(data => { trHeureFin.appendChild(data) });
+
+
+    const trEtat = document.createElement("tr");
+    const tdEtat = document.createElement("td");
+    tdEtat.innerHTML = "en cours"
+    tdEtat.classList.add("etat");
+    trEtat.appendChild(tdEtat);
+
+
+
+
+    [trDateDebut, trDateFin, trHeureDebut, trHeureFin, trEtat].forEach(tr => {
+        table.appendChild(tr);
+        tr.classList.add("ligne");
+    });
     /* ajout de style (attributs class et id) */
-    note.className = "note drag-drop-note";
-    note.setAttribute("id", `task${nbrNotes+1}`);
-    note.setAttribute('data-id', note.id);
-    note.setAttribute('draggable', 'true');
-    titleNoteP.className = "title-note";
-    titleNoteP.innerHTML = "votre note";
+    note.classList.add("note");
+    titleNoteP.classList.add("title-note");
+    titleNoteP.innerHTML = `note ${nbrNotes+1} `;
+    iOfSmall.className = "fa-solid fa-pen-to-square fa-2x";
+    IconsP.classList.add("iconsPara");
+    btnArrowRight.className = "";
+    btnArrowLeft.className = "";
+    arrowRight.className = "fa-solid fa-angles-right fa-4x";
+    arrowLeft.className = "fa-solid fa-angles-left fa-4x ";
+    overviewDiv.classList.add("overview");
 
-    article.className = "note-information";
-    article.style.zIndex = `${10+nbrNotes+1} `
-    infoTitleNoteDiv.className = "info-title-note";
-    h1Title.innerHTML = `note ${nbrNotes+1}`;
-
-    btnCloseNoteSpan.className = "btn-close-note";
-    iBtnClose.className = "fa-solid fa-xmark fa-4x";
-    form.className = "note-form";
-    form.setAttribute("action", "");
-    [formCntrl1, formCntrl2, formCntrl3, formCntrl4].forEach(formControl => formControl.className = "form-control");
-    [label1, label2, label3, label4].forEach(label => label.setAttribute("for", ""));
-
-    label1.innerHTML = "Tâche";
-    label2.innerHTML = "Date";
-    label3.innerHTML = "Heure de Début";
-    label4.innerHTML = "Heure de Fin";
-    label1.setAttribute("for", `tache${nbrNotes+1}`);
-    label2.setAttribute("for", `dateD${nbrNotes+1}`);
-    label3.setAttribute("for", `time${nbrNotes+1}`);
-    label4.setAttribute("for", `dateF${nbrNotes+1}`);
-    textArreaNote.setAttribute("id", `tache${nbrNotes+1}`);
-    textArreaNote.setAttribute("name", `tache${nbrNotes+1}`);
-    input1.setAttribute("id", `dateD${nbrNotes+1}`);
-    input2.setAttribute("id", `time${nbrNotes+1}`);
-    input3.setAttribute("id", `dateF${nbrNotes+1}`);
-
-    textArreaNote.className = "theNoteText";
-    [input1, input3].forEach(input => input.setAttribute("type", 'date'))
-    input2.setAttribute("type", 'time');
-    btnAjouter.setAttribute('type', 'button');
-    btnAjouter.className = "btnSaveNote";
-    btnAjouter.innerHTML = "Ajouter";
 
     /* liens parents fils */
     note.appendChild(titleNoteP);
-    note.appendChild(article);
-    article.appendChild(infoTitleNoteDiv);
-    article.appendChild(form);
-    infoTitleNoteDiv.appendChild(h1Title);
-    infoTitleNoteDiv.appendChild(btnCloseNoteSpan);
-    btnCloseNoteSpan.appendChild(iBtnClose);
-    [formCntrl1, formCntrl2, formCntrl3, formCntrl4].forEach(formControl => form.appendChild(formControl));
-    form.appendChild(btnAjouter);
-
-
-
-    formCntrl1.appendChild(label1);
-    formCntrl1.appendChild(textArreaNote);
-
-    formCntrl2.appendChild(label2);
-    formCntrl2.appendChild(input1);
-
-    formCntrl3.appendChild(label3);
-    formCntrl3.appendChild(input2);
-
-    formCntrl4.appendChild(label4);
-    formCntrl4.appendChild(input3);
-
+    note.appendChild(smallEdit);
+    smallEdit.appendChild(iOfSmall);
+    note.appendChild(IconsP);
+    IconsP.appendChild(btnArrowLeft);
+    IconsP.appendChild(btnArrowRight);
+    btnArrowLeft.appendChild(arrowLeft);
+    btnArrowRight.appendChild(arrowRight);
+    note.appendChild(overviewDiv);
 
     /* 
     ! events about note 
     */
-    textArreaNote.select();
-    // note.addEventListener("click", showNote)
-    note.addEventListener("dblclick", chooseNote)
-    note.addEventListener("dragstart", dragStartNote);
-    note.addEventListener("dragend", dragEndNote);
-    // var planning = [input1.value, input2.value, input3.value];
-    btnCloseNoteSpan.addEventListener("click", closeInfosNote);
-    btnAjouter.addEventListener("click", saveTask);
+    smallEdit.addEventListener("click", editTask);
+    note.addEventListener("dblclick", chooseNote);
 
-    function saveTask() {
-        var planning = [input1.value, input2.value, input3.value];
-
-        if (planning.some(data => data == "")) {
-            console.log(planning)
-            alert("ok");
-        } else {
-            console.log(planning);
-            // const butoir = new Date(planning[0]);
-            // const begin = new Date(`${planning[0] + planning[1]}`);
-            testDate(planning)
-                // console.log(butoir);
-                // console.log(begin);
-        }
-    }
     return note;
+
 }
 
+function evoquerModal(e) {
+    const noteId = e.target.parentElement.parentElement;
+    const textNote = e.target.parentElement.previousElementSibling.innerHTML;
+    const theFormControls = document.querySelectorAll(".form-control");
+    const donnees = document.querySelectorAll("table tr td");
+
+
+    theFormControls[0].lastElementChild.value = textNote;
+    theFormControls[1].lastElementChild.value = donnees[0].innerHTML;
+    theFormControls[2].lastElementChild.value = donnees[1].innerHTML;
+    theFormControls[3].lastElementChild.value = donnees[2].innerHTML;
+    theFormControls[4].lastElementChild.value = donnees[3].innerHTML;
+
+
+
+    modalInfo.classList.add("open");
+}
+
+function editTask(e) {
+    evoquerModal(e);
+}
 
 // 
-function showNote(params) {
-    this.lastElementChild.classList.toggle("close");
-    ombre.classList.toggle("gener");
-}
+// function AddNote(params) {
+//     this.lastElementChild.classList.toggle("close");
+//     ombre.classList.toggle("gener");
+// }
 // ! chooseNote
 function chooseNote(e) {
+    // e.stopPropagation();
     this.classList.toggle("choosenNote");
+    this.lastElementChild.classList.toggle("choosenNoteAZ");
+    const theChoosenNote = document.querySelectorAll(".choosenNote");
+
+    if (theChoosenNote.length > 0) {
+        deleteTask.classList.add("you_want_del_task");
+    } else {
+        deleteTask.classList.remove("you_want_del_task");
+    }
     setTimeout(() => {
+        deleteTask.classList.remove("you_want_del_task");
         this.classList.toggle("choosenNote");
+        this.lastElementChild.classList.toggle("choosenNoteAZ");
     }, 10000);
     e.stopPropagation();
 
@@ -296,28 +310,97 @@ function closeInfosNote(e) {
     e.stopPropagation();
 }
 
-function testDate(planning) {
-    const beginYear = planning[0].slice(0, 4);
-    const beginMonth = planning[0].slice(5, 7);
-    const beginDay = planning[0].slice(8);
 
-    const timeHours = planning[1].slice(0, 2);
-    const timeMin = planning[1].slice(3);
-
-    const endYear = planning[2].slice(0, 4);
-    const endMonth = planning[2].slice(5, 7);
-    const endDay = planning[2].slice(8);
-
-    console.log(timeHours, timeMin);
-    const now = new Date()
-    const currentY = now.getFullYear();
-    // const currentMin = now.get();
-    const currentMin = now.getMinutes();
-    // now.get
+function showError(input) {
+    input.className = 'theNoteText error';
 }
 
+function showSuccess(input) {
+    input.className = 'theNoteText success';
+}
+
+function checkRequired(input, cptError) {
+    if (input.value.trim === '') {
+        showError(input);
+        cptError = cptError + 1;
+    } else {
+        showSuccess(input);
+    }
+}
+
+function cleanTheForm() {
+    const theFormControls = document.querySelectorAll(".form-control");
+    theFormControls.forEach(fromCtrl => {
+        fromCtrl.lastElementChild.value = "";
+    });
+}
+
+function getInfos(modal) {
+    const planning = [];
+    const theFormControls = document.querySelectorAll(".form-control");
+    theFormControls.forEach(fromCtrl => {
+        planning.push(fromCtrl.lastElementChild.value);
+    });
+    return planning;
+}
+
+function testDate(planning, ) {
+    let cptErrorDate = 0
+    const beginYear = planning[1].slice(0, 4);
+    const beginMonth = planning[1].slice(5, 7);
+    const beginDay = planning[1].slice(8);
+    const hoursBegin = planning[2].slice(0, 2);
+    const minBegin = planning[2].slice(3);
+
+    const endYear = planning[3].slice(0, 4);
+    const endMonth = planning[3].slice(5, 7);
+    const endDay = planning[3].slice(8);
+    const hoursEnd = planning[4].slice(0, 2);
+    const minEnd = planning[4].slice(3);
 
 
+    const now = new Date();
+    const timestampNow = now.getTime();
+
+    const DateStart = new Date(beginYear, beginMonth - 1, beginDay, hoursBegin, minBegin);
+    const DateEnd = new Date(endYear, endMonth - 1, endDay, hoursEnd, minEnd);
+
+    const timestampTaskDelay = DateEnd.getTime() - DateStart.getTime();
+
+
+    // console.log(DateStart.getTime());
+    // console.log(timestampTaskDelay);
+
+    if (timestampNow >= DateStart.getTime()) {
+        cptErrorDate = cptErrorDate + 1;
+    }
+
+    if (timestampTaskDelay <= 0) {
+        cptErrorDate = cptErrorDate + 1;
+    }
+
+    return [cptErrorDate, timestampTaskDelay];
+}
+
+function validAdding(noteForm, planning) {
+    var cptError = 0;
+
+    const divContent = noteForm.querySelectorAll(".form-control");
+
+    for (let i = 0; i < planning.length; i++) {
+        if (planning[i] === "") {
+            showError(divContent[i].lastElementChild);
+            cptError++;
+        } else {
+            showSuccess(divContent[i].lastElementChild);
+        }
+    }
+    console.log("cptError après required:", cptError);
+
+    cptError += testDate(planning)[0];
+    console.log("cptError après validate :", cptError);
+    return cptError === 0;
+}
 
 // ! createColumn
 function createColumn() {
@@ -413,19 +496,6 @@ function deleteTheColumn() {
             indispoDelTask();
         }
     }
-    // if (listsOfColumns.length === 1) { return false } else {
-
-    // }
-    // for (const column of listsOfColumnsSelected) {
-    //     if (column.id = "col1") {
-    //         alert("ok");
-    //     } else {
-    //         console.log(column.id);
-    //         taskDashboard.removeChild(column);
-    //         indisponibiliser();
-    //         indispoDelTask();
-    //     }
-    // }
 }
 // ! deleteTheTask
 function deleteTheTask() {
@@ -440,40 +510,4 @@ function deleteTheTask() {
             }
         }
     });
-}
-/* Drag and drop for the Task */
-// ! dragStartNote
-function dragStartNote(e) {
-    this.classList.add('tenu');
-    setTimeout(() => { this.classList.add('invisible') }, 0);
-}
-// ! dragEndNote
-function dragEndNote(e) {
-    this.classList.remove('tenu');
-    setTimeout(() => { this.classList.remove('invisible') }, 0);
-
-}
-// ! dragOverTask
-function dragOverTask(e) {
-    e.preventDefault();
-
-    e.stopPropagation();
-}
-// ! dragEnterTask
-function dragEnterTask(e) {
-    e.preventDefault();
-    this.parentElement.classList.add('ajout');
-    e.stopPropagation();
-}
-// ! dragLeaveTask
-function dragLeaveTask(e) {
-    this.parentElement.classList.remove('ajout');
-    e.stopPropagation();
-
-}
-// ! dragDropTask
-function dragDropTask(e, note) {
-    e.target.parentElement.classList.remove('ajout');
-    e.target.appendChild(note);
-    e.stopPropagation();
 }
