@@ -447,6 +447,10 @@ une tache est composée d'informations que sont:
     overflow: hidden;
 }
 
+.ready_task {
+    background-color: gray!important;
+}
+
 .choosenNote {
     background: red!important;
     border-style: dashed;
@@ -514,6 +518,10 @@ p.iconsPara {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.unavailable {
+    display: none!important;
 }
 
 p.iconsPara button {

@@ -93,20 +93,22 @@ btnSaveNote.addEventListener("click", () => {
     var delay = testDate(planning)[1];
 
     remplirTache(task, planning, delay);
+
     const lignes = task.querySelectorAll("table tr td");
-    let timer = setInterval(() => {
-        delay--;
-        console.log(delay);
+    var timer = setInterval(() => {
+        delay -= 1000;
         etatTache(lignes[4], delay);
-        if (delay === 0) {
+        console.log(delay);
+        if (delay <= 0) {
             clearInterval(timer);
         }
-    }, 1);
+    }, 1000);
 
     cleanTheForm();
     modalInfo.classList.remove("open");
     indispoDelTask();
 });
+
 
 function remplirTache(task, planning, delay) {
     const lignes = task.querySelectorAll("table tr td");
@@ -126,11 +128,22 @@ btnCloseNote.addEventListener('click', e => {
 
 function etatTache(tdETat, delay) {
     if (delay > 0) {
-        tdETat.innerHTML = "en cours";
+        tdETat.innerHTML = "en cours ...";
         tdETat.className = "etat en_cours";
-    } else if (delay == 0) {
+    } else if (delay <= 0) {
         tdETat.innerHTML = "terminée";
         tdETat.className = "etat ready";
+        const thisNote = tdETat.parentElement.parentElement.parentElement.parentElement;
+        /* note */
+        thisNote.classList.add("ready_task");
+        /* bouton edit */
+        thisNote.children[1].classList.add("unavailable");
+        /* boutons déplacement */
+        thisNote.children[2].classList.add("unavailable");
+        /* table of the overview */
+        tdETat.parentElement.parentElement.classList.add("ready_task");
+
+
     }
 }
 /* 
@@ -294,7 +307,7 @@ function createTask() {
 }
 
 function evoquerModal(e) {
-    const noteId = e.target.parentElement.parentElement;
+    // const noteId = e.target.parentElement.parentElement;
     const textNote = e.target.parentElement.previousElementSibling.innerHTML;
     const theFormControls = document.querySelectorAll(".form-control");
     const donnees = document.querySelectorAll("table tr td");
@@ -389,6 +402,7 @@ function getInfos(modal) {
     return planning;
 }
 
+
 function testDate(planning) {
     const divContent = noteForm.querySelectorAll(".form-control");
 
@@ -447,14 +461,12 @@ function testDate(planning) {
     }
     console.log("start", DateStart, DateStart.getTime());
     console.log("end", DateEnd, DateEnd.getTime());
-    return [cptErrorDate, `${DateEnd.getTime() - DateStart.getTime() + (DateStart.getTime() - timestampNow)}`];
+    return [cptErrorDate, `${DateEnd.getTime() - timestampNow}`];
 }
 
 function validAdding(noteForm, planning) {
     var cptError = 0;
-
     const divContent = noteForm.querySelectorAll(".form-control");
-
 
     for (let i = 0; i < planning.length; i++) {
         if (planning[i] === "") {
@@ -470,7 +482,6 @@ function validAdding(noteForm, planning) {
     if (cptError === 0) {
         cptError += testDate(planning)[0];
     }
-
 
     return cptError === 0;
 }
