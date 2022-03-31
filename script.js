@@ -47,6 +47,14 @@ const tabColors = [
 /* 
 rendre indisponible certains boutons selon la circonstance 
 */
+window.addEventListener("load", () => {
+    const theFormControls = document.querySelectorAll(".form-control");
+    // const now = new Date();
+    // const temps = `${now.getFullYear()}:${now.getMonth()+1}:${now.getDate()}`;
+    // console.log(temps);
+    // theFormControls[1].lastElementChild.value = temps;
+
+});
 indisponibiliser();
 indispoDelTask();
 
@@ -55,10 +63,10 @@ Le DOM
 */
 
 downDOM.addEventListener("click", DownAndUpDOM);
-btnTrash.addEventListener("click", TrashAsideShow)
-    /* 
-    menu vertical
-    */
+btnTrash.addEventListener("click", TrashAsideShow);
+/* 
+menu vertical
+*/
 btnMainNav.addEventListener("click", () => mainNav.classList.toggle("showMainNav"));
 
 /* 
@@ -81,25 +89,50 @@ btnSaveNote.addEventListener("click", () => {
     let firstColumn = document.querySelector(".colonne");
     var task = createTask();
     firstColumn.lastElementChild.appendChild(task);
-    remplirTache(task, planning);
+
+    var delay = testDate(planning)[1];
+
+    remplirTache(task, planning, delay);
+    const lignes = task.querySelectorAll("table tr td");
+    let timer = setInterval(() => {
+        delay--;
+        console.log(delay);
+        etatTache(lignes[4], delay);
+        if (delay === 0) {
+            clearInterval(timer);
+        }
+    }, 1);
+
     cleanTheForm();
     modalInfo.classList.remove("open");
     indispoDelTask();
 });
 
-function remplirTache(task, planning) {
+function remplirTache(task, planning, delay) {
     const lignes = task.querySelectorAll("table tr td");
     task.firstElementChild.innerHTML = planning[0];
     lignes[0].innerHTML = planning[1];
     lignes[1].innerHTML = planning[2];
     lignes[2].innerHTML = planning[3];
     lignes[3].innerHTML = planning[4];
+    etatTache(lignes[4], delay);
 }
+
 
 btnCloseNote.addEventListener('click', e => {
     cleanTheForm();
     modalInfo.classList.remove("open");
 });
+
+function etatTache(tdETat, delay) {
+    if (delay > 0) {
+        tdETat.innerHTML = "en cours";
+        tdETat.className = "etat en_cours";
+    } else if (delay == 0) {
+        tdETat.innerHTML = "terminée";
+        tdETat.className = "etat ready";
+    }
+}
 /* 
 supprimer une colonne 
 */
@@ -224,6 +257,10 @@ function createTask() {
     });
     /* ajout de style (attributs class et id) */
     note.classList.add("note");
+    /* 
+    ?cette attribut pose prblème lorsuq'on supprime
+    note.setAttribute("id", `note${nbrNotes+1}`); 
+    */
     titleNoteP.classList.add("title-note");
     titleNoteP.innerHTML = `note ${nbrNotes+1} `;
     iOfSmall.className = "fa-solid fa-pen-to-square fa-2x";
@@ -262,14 +299,11 @@ function evoquerModal(e) {
     const theFormControls = document.querySelectorAll(".form-control");
     const donnees = document.querySelectorAll("table tr td");
 
-
     theFormControls[0].lastElementChild.value = textNote;
     theFormControls[1].lastElementChild.value = donnees[0].innerHTML;
     theFormControls[2].lastElementChild.value = donnees[1].innerHTML;
     theFormControls[3].lastElementChild.value = donnees[2].innerHTML;
     theFormControls[4].lastElementChild.value = donnees[3].innerHTML;
-
-
 
     modalInfo.classList.add("open");
 }
@@ -278,6 +312,7 @@ function editTask(e) {
     evoquerModal(e);
 }
 
+
 // 
 // function AddNote(params) {
 //     this.lastElementChild.classList.toggle("close");
@@ -285,7 +320,7 @@ function editTask(e) {
 // }
 // ! chooseNote
 function chooseNote(e) {
-    // e.stopPropagation();
+    e.stopPropagation();
     this.classList.toggle("choosenNote");
     this.lastElementChild.classList.toggle("choosenNoteAZ");
     const theChoosenNote = document.querySelectorAll(".choosenNote");
@@ -300,8 +335,14 @@ function chooseNote(e) {
         this.classList.toggle("choosenNote");
         this.lastElementChild.classList.toggle("choosenNoteAZ");
     }, 10000);
-    e.stopPropagation();
+}
 
+function refleshTask() {
+    const myTasks = document.querySelectorAll(".note");
+    myTasks.forEach((task, i) => {
+        task.setAttribute("id", `note${ i + 1 }`);
+        task = `note${i+1}`;
+    });
 }
 // ! closeInfosNote
 function closeInfosNote(e) {
@@ -319,20 +360,24 @@ function showSuccess(input) {
     input.className = 'theNoteText success';
 }
 
-function checkRequired(input, cptError) {
-    if (input.value.trim === '') {
-        showError(input);
-        cptError = cptError + 1;
-    } else {
-        showSuccess(input);
-    }
-}
-
 function cleanTheForm() {
     const theFormControls = document.querySelectorAll(".form-control");
     theFormControls.forEach(fromCtrl => {
         fromCtrl.lastElementChild.value = "";
+        fromCtrl.lastElementChild.className = "theNoteText";
+        fromCtrl.lastElementChild.parentElement.firstElementChild.innerHTML = "";
     });
+}
+
+function emptyModal() {
+    const theFormControls = document.querySelectorAll(".form-control");
+    let vide = 0;
+    theFormControls.forEach(fromCtrl => {
+        if (fromCtrl.lastElementChild.value === "") {
+            vide++;
+        };
+    });
+    return vide == 5;
 }
 
 function getInfos(modal) {
@@ -344,8 +389,11 @@ function getInfos(modal) {
     return planning;
 }
 
-function testDate(planning, ) {
-    let cptErrorDate = 0
+function testDate(planning) {
+    const divContent = noteForm.querySelectorAll(".form-control");
+
+    let cptErrorDate = 0;
+
     const beginYear = planning[1].slice(0, 4);
     const beginMonth = planning[1].slice(5, 7);
     const beginDay = planning[1].slice(8);
@@ -368,18 +416,38 @@ function testDate(planning, ) {
     const timestampTaskDelay = DateEnd.getTime() - DateStart.getTime();
 
 
-    // console.log(DateStart.getTime());
-    // console.log(timestampTaskDelay);
+
 
     if (timestampNow >= DateStart.getTime()) {
+        showError(divContent[1].lastElementChild);
+        showError(divContent[2].lastElementChild);
+        divContent[1].lastElementChild.parentElement.firstElementChild.innerHTML = "la date et \ ou l'heure de début est incorrect";
+        divContent[2].lastElementChild.parentElement.firstElementChild.innerHTML = "la date et \ ou l'heure de début est incorrect";
+
         cptErrorDate = cptErrorDate + 1;
+    } else {
+        showSuccess(divContent[1].lastElementChild);
+        showSuccess(divContent[2].lastElementChild);
+        divContent[1].lastElementChild.parentElement.firstElementChild.innerHTML = "";
+        divContent[2].lastElementChild.parentElement.firstElementChild.innerHTML = "";
     }
 
     if (timestampTaskDelay <= 0) {
+        showError(divContent[3].lastElementChild);
+        showError(divContent[4].lastElementChild);
+        divContent[3].lastElementChild.parentElement.firstElementChild.innerHTML = "le délai est incorrect, vérifie l'heure et la date de fin";
+        divContent[4].lastElementChild.parentElement.firstElementChild.innerHTML = "le délai est incorrect, vérifie l'heure et la date de fin ";
         cptErrorDate = cptErrorDate + 1;
-    }
+    } else {
+        showSuccess(divContent[3].lastElementChild);
+        showSuccess(divContent[4].lastElementChild);
+        divContent[3].lastElementChild.parentElement.firstElementChild.innerHTML = "";
+        divContent[4].lastElementChild.parentElement.firstElementChild.innerHTML = "";
 
-    return [cptErrorDate, timestampTaskDelay];
+    }
+    console.log("start", DateStart, DateStart.getTime());
+    console.log("end", DateEnd, DateEnd.getTime());
+    return [cptErrorDate, `${DateEnd.getTime() - DateStart.getTime() + (DateStart.getTime() - timestampNow)}`];
 }
 
 function validAdding(noteForm, planning) {
@@ -387,18 +455,23 @@ function validAdding(noteForm, planning) {
 
     const divContent = noteForm.querySelectorAll(".form-control");
 
+
     for (let i = 0; i < planning.length; i++) {
         if (planning[i] === "") {
             showError(divContent[i].lastElementChild);
+            divContent[i].lastElementChild.parentElement.firstElementChild.innerHTML = "ce champ est requis";
             cptError++;
         } else {
             showSuccess(divContent[i].lastElementChild);
+            divContent[i].lastElementChild.parentElement.firstElementChild.innerHTML = "";
         }
     }
-    console.log("cptError après required:", cptError);
 
-    cptError += testDate(planning)[0];
-    console.log("cptError après validate :", cptError);
+    if (cptError === 0) {
+        cptError += testDate(planning)[0];
+    }
+
+
     return cptError === 0;
 }
 
@@ -444,6 +517,7 @@ function refleshColumn() {
         // }
     });
 }
+
 // ! modifierTitreColonne
 function modifierTitreColonne(e) {
     e.stopPropagation();
