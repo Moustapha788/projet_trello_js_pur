@@ -106,7 +106,10 @@ btnSaveNote.addEventListener("click", () => {
     var timer = setInterval(() => {
         delay -= 1000;
         etatTache(lignes[4], delay);
-        console.log(delay);
+        /*  
+        IT SHOWS THE DELAY OF THE TASK
+        console.log(delay); 
+        */
         if (delay <= 0) {
             clearInterval(timer);
         }
@@ -149,7 +152,7 @@ function etatTache(tdETat, delay) {
         /* bouton edit */
         thisNote.children[1].classList.add("unavailable");
         /* boutons déplacement */
-        thisNote.children[2].classList.add("unavailable");
+        thisNote.children[3].classList.add("unavailable");
         /* table of the overview */
         tdETat.parentElement.parentElement.classList.add("ready_task");
     }
@@ -175,7 +178,7 @@ function DownAndUpDOM() {
     main.classList.toggle("pendule")
 
 }
-
+// ! TrashAsideShow
 function TrashAsideShow() {
     this.parentElement.classList.toggle("showTrashAside");
     this.firstElementChild.classList.toggle("fa-chevron-right");
@@ -197,7 +200,6 @@ function indisponibiliser() {
         addColumn.classList.remove('indisponible');
     }
 }
-
 // ! indispoDelTask
 function indispoDelTask() {
     const listesDeNotes = document.querySelectorAll(".liste-des-notes");
@@ -211,7 +213,6 @@ function indispoDelTask() {
         deleteTask.classList.remove('indisponible');
     }
 }
-
 // ! createTask
 function createTask() {
 
@@ -225,6 +226,8 @@ function createTask() {
     const note = document.createElement("div");
     const titleNoteP = document.createElement("p");
     const smallEdit = document.createElement("small");
+    const btnRestore = document.createElement("button");
+    const ifOfRestore = document.createElement("i");
     const iOfSmall = document.createElement("i");
 
     const IconsP = document.createElement("p");
@@ -286,6 +289,8 @@ function createTask() {
     titleNoteP.classList.add("title-note");
     titleNoteP.innerHTML = `note ${nbrNotes+1} `;
     iOfSmall.className = "fa-solid fa-pen-to-square fa-2x";
+    btnRestore.className = "restore";
+    ifOfRestore.className = "fa-solid fa-trash-can-arrow-up fa-2x";
     IconsP.classList.add("iconsPara");
     btnArrowRight.className = "";
     btnArrowLeft.className = "";
@@ -298,13 +303,14 @@ function createTask() {
     note.appendChild(titleNoteP);
     note.appendChild(smallEdit);
     smallEdit.appendChild(iOfSmall);
+    note.appendChild(btnRestore);
+    btnRestore.appendChild(ifOfRestore);
     note.appendChild(IconsP);
     IconsP.appendChild(btnArrowLeft);
     IconsP.appendChild(btnArrowRight);
     btnArrowLeft.appendChild(arrowLeft);
     btnArrowRight.appendChild(arrowRight);
-    // btnArrowRight.innerHTML += "R";
-    // btnArrowLeft.innerHTML += "L";
+
     note.appendChild(overviewDiv);
 
     /* 
@@ -313,15 +319,30 @@ function createTask() {
     overviewDiv.addEventListener("click", voirPlus);
     smallEdit.addEventListener("click", editTask);
     note.addEventListener("dblclick", chooseNote);
-
     btnArrowLeft.addEventListener("click", movingTaskToLeft);
     btnArrowRight.addEventListener("click", movingTaskToRight);
-
+    btnRestore.addEventListener("click", restoreTask);
 
     return note;
 
 }
 
+function restoreTask(e) {
+    const thisNote = this.parentElement;
+    const idParentColumn = thisNote.getAttribute("data-colPaprent");
+    const columnCible = taskDashboard.querySelector(`#${idParentColumn}`);
+    const principalColumn = taskDashboard.querySelector("#col1");
+    if (columnCible) {
+        columnCible.lastElementChild.appendChild(thisNote);
+    } else {
+        if (principalColumn) {
+            principalColumn.lastElementChild.appendChild(thisNote);
+        }
+    }
+    indispoDelTask();
+
+}
+// ! movingTaskToLeft
 function movingTaskToLeft(e) {
     // e.stopPropagation();
     const thisNote = accessThisNote(e);
@@ -341,7 +362,7 @@ function movingTaskToLeft(e) {
         return false;
     }
 }
-
+// ! movingTaskToRight
 function movingTaskToRight(e) {
     // e.stopPropagation();
     const thisNote = accessThisNote(e);
@@ -362,17 +383,16 @@ function movingTaskToRight(e) {
         return false;
     }
 }
-
+// ! accessThisNote
 function accessThisNote(e) {
     return e.target.parentElement.parentElement;
 }
-
+// ! parseTheId
 function parseTheId(thisNote) {
     let identifiant = parseInt(thisNote.id.replace("col", ""));
     return identifiant;
 }
-
-
+// ! evoquerModal
 function evoquerModal(e) {
     // const noteId = e.target.parentElement.parentElement;
     const textNote = e.target.parentElement.previousElementSibling.innerHTML;
@@ -397,9 +417,8 @@ function editTask(e) {
 }
 
 function voirPlus(e) {
-    this.classList.toggle("voir_plus");
+    this.classList.add("voir_plus");
 }
-
 
 // ! chooseNote
 function chooseNote(e) {
@@ -421,23 +440,15 @@ function chooseNote(e) {
         this.lastElementChild.classList.remove("choosenNoteAZ");
     }, 10000);
 }
-
-function refleshTask() {
-    const myTasks = document.querySelectorAll(".note");
-    myTasks.forEach((task, i) => {
-        task.setAttribute("id", `note${ i + 1 }`);
-        task = `note${i+1}`;
-    });
-}
-
+// ! showError
 function showError(input) {
     input.className = 'theNoteText error';
 }
-
+// ! showSuccess
 function showSuccess(input) {
     input.className = 'theNoteText success';
 }
-
+// ! cleanTheForm
 function cleanTheForm() {
     const theFormControls = document.querySelectorAll(".form-control");
     theFormControls.forEach(fromCtrl => {
@@ -446,7 +457,7 @@ function cleanTheForm() {
         fromCtrl.lastElementChild.parentElement.firstElementChild.innerHTML = "";
     });
 }
-
+// ! emptyModal
 function emptyModal() {
     const theFormControls = document.querySelectorAll(".form-control");
     let vide = 0;
@@ -457,7 +468,7 @@ function emptyModal() {
     });
     return vide == 5;
 }
-
+// ! getInfos
 function getInfos(modal) {
     const planning = [];
     const theFormControls = document.querySelectorAll(".form-control");
@@ -467,7 +478,7 @@ function getInfos(modal) {
     return planning;
 }
 
-
+// ! validAdding
 function testDate(planning) {
     const divContent = noteForm.querySelectorAll(".form-control");
 
@@ -491,9 +502,6 @@ function testDate(planning) {
     const DateEnd = new Date(endYear, endMonth - 1, endDay, hoursEnd, minEnd);
 
     const timestampTaskDelay = DateEnd.getTime() - DateStart.getTime();
-
-
-
 
     if (timestampNow >= DateStart.getTime()) {
         showError(divContent[1].lastElementChild);
@@ -524,7 +532,7 @@ function testDate(planning) {
     }
     return [cptErrorDate, `${DateEnd.getTime() - timestampNow}`];
 }
-
+// ! validAdding
 function validAdding(noteForm, planning) {
     var cptError = 0;
     const divContent = noteForm.querySelectorAll(".form-control");
@@ -578,7 +586,7 @@ function createColumn() {
     column.addEventListener("dblclick", selectTheColumn)
     return column;
 }
-
+// ! refleshColumn
 function refleshColumn() {
     const myColumns = document.querySelectorAll(".colonne");
     myColumns.forEach((col, i) => {
@@ -663,12 +671,14 @@ function deleteTheTask() {
                 const idParent = getIdParent(notes);
                 notes.setAttribute("data-colPaprent", idParent);
                 trashAside.lastElementChild.appendChild(notes);
+                notes.classList.remove("choosenNote");
+                notes.lastElementChild.classList.remove("choosenNoteAZ");
                 indispoDelTask();
             }
         }
     });
 }
-
+// ! getIdParent
 function getIdParent(notes) {
     const col = notes.parentElement.parentElement;
     return col.id;

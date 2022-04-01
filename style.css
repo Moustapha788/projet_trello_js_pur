@@ -153,7 +153,8 @@ body {
 .corbeille {
     width: 100%;
     height: calc(100vh - 120px);
-    background-color: crimson;
+    background: linear-gradient(to left, rgba(0, 0, 128, 0.2), rgba(0, 0, 0, 0.6)), url(/img/synap.jpeg) no-repeat center;
+    background-size: cover;
     overflow-x: hidden;
     overflow-y: auto;
     display: grid;
@@ -164,9 +165,9 @@ body {
     row-gap: 70px;
 }
 
-.corbeille .choosenNote {
-    background-color: transparent!important;
-    border: none;
+#trash-aside .choosenNote {
+    background-color: #009432!important;
+    border: 2px solid #fff!important;
 }
 
 .corbeille .note small,
@@ -185,7 +186,9 @@ body {
     left: 0;
     width: 25rem;
     border-right: 2px double #fff;
-    background-color: rgb(183, 21, 64);
+    /* background-color: rgb(183, 21, 64); */
+    background: linear-gradient(to left, rgba(0, 0, 128, 0.2), rgba(0, 0, 0, 0.6)), url(/img/synap.jpeg) no-repeat center;
+    background-size: cover;
     transform: translateX(-101%);
     transition: all 0.7s ease-in-out;
 }
@@ -471,7 +474,7 @@ une tache est composée d'informations que sont:
 }
 
 .choosenNote {
-    background: red!important;
+    background: red;
     border-style: dashed;
     border-color: #fff;
 }
@@ -521,7 +524,26 @@ une tache est composée d'informations que sont:
     align-items: center;
     color: white;
     cursor: pointer;
-    z-index: 25;
+    z-index: 10;
+}
+
+.restore {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    font-size: 1.5em;
+    top: 2%;
+    right: 2%;
+    z-index: 10;
+    color: #fff;
+}
+
+#task-dashboard .restore {
+    display: none;
+}
+
+#trash-aside .restore {
+    display: block;
 }
 
 p.iconsPara {
@@ -611,7 +633,6 @@ p.iconsPara i {
 
 .voir_plus {
     transform: translateY(102%);
-    transform: translateY(0);
 }
 
 .note:hover .overview {
