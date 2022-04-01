@@ -20,6 +20,7 @@ const addColumn = document.getElementById("add-Column");
 const deleteColumn = document.getElementById('delete-Column');
 const deleteTask = document.getElementById('delete-task');
 const taskDashboard = document.getElementById('task-dashboard');
+const trashAside = document.querySelector("#trash-aside");
 // const listeDesNotes = document.querySelectorAll(".liste-des-notes");
 const tabColors = [
     "rgb(52, 73, 94)",
@@ -81,15 +82,22 @@ addColumn.addEventListener('click', () => {
 /* 
 ajouter une note 
 */
-addTask.addEventListener('click', () => modalInfo.classList.add("open"));
+addTask.addEventListener('click', () => {
+    ombre.classList.toggle("gener");
+    modalInfo.classList.add("open");
+});
+
 btnSaveNote.addEventListener("click", () => {
     var planning = getInfos();
     /* si les données ne sont pas valides alors ne continue pas */
     if (!validAdding(noteForm, planning)) { return false; }
+    ombre.classList.remove("gener");
+
     let firstColumn = document.querySelector(".colonne");
     var task = createTask();
     firstColumn.lastElementChild.appendChild(task);
-
+    const idParent = getIdParent(task);
+    task.setAttribute("data-colPaprent", idParent);
     var delay = testDate(planning)[1];
 
     remplirTache(task, planning, delay);
@@ -124,6 +132,8 @@ function remplirTache(task, planning, delay) {
 btnCloseNote.addEventListener('click', e => {
     cleanTheForm();
     modalInfo.classList.remove("open");
+    ombre.classList.remove("gener");
+
 });
 
 function etatTache(tdETat, delay) {
@@ -142,8 +152,6 @@ function etatTache(tdETat, delay) {
         thisNote.children[2].classList.add("unavailable");
         /* table of the overview */
         tdETat.parentElement.parentElement.classList.add("ready_task");
-
-
     }
 }
 /* 
@@ -270,6 +278,7 @@ function createTask() {
     });
     /* ajout de style (attributs class et id) */
     note.classList.add("note");
+
     /* 
     ?cette attribut pose prblème lorsuq'on supprime
     note.setAttribute("id", `note${nbrNotes+1}`); 
@@ -301,11 +310,13 @@ function createTask() {
     /* 
     ! events about note 
     */
+    overviewDiv.addEventListener("click", voirPlus);
     smallEdit.addEventListener("click", editTask);
     note.addEventListener("dblclick", chooseNote);
 
     btnArrowLeft.addEventListener("click", movingTaskToLeft);
     btnArrowRight.addEventListener("click", movingTaskToRight);
+
 
     return note;
 
@@ -320,7 +331,11 @@ function movingTaskToLeft(e) {
         identifiant--;
         const previousColum = taskDashboard.querySelector(`#col${identifiant} `);
         if (previousColum) {
+            thisNote.classList.remove('animate__backInLeft');
+            thisNote.classList.add('animate__backInRight');
             previousColum.lastElementChild.appendChild(thisNote);
+            const idParent = previousColum.id;
+            thisNote.setAttribute("data-colPaprent", idParent);
         }
     } else {
         return false;
@@ -337,12 +352,15 @@ function movingTaskToRight(e) {
         identifiant++;
         const nextColumn = taskDashboard.querySelector(`#col${identifiant}`);
         if (nextColumn) {
+            thisNote.classList.remove('animate__backInRight');
+            thisNote.classList.add('animate__backInLeft');
             nextColumn.lastElementChild.appendChild(thisNote);
+            const idParent = nextColumn.id;
+            thisNote.setAttribute("data-colPaprent", idParent);
         }
     } else {
         return false;
     }
-    console.log(identifiant);
 }
 
 function accessThisNote(e) {
@@ -374,15 +392,15 @@ function evoquerModal(e) {
 }
 
 function editTask(e) {
+    ombre.classList.add("gener");
     evoquerModal(e);
 }
 
+function voirPlus(e) {
+    this.classList.toggle("voir_plus");
+}
 
-// 
-// function AddNote(params) {
-//     this.lastElementChild.classList.toggle("close");
-//     ombre.classList.toggle("gener");
-// }
+
 // ! chooseNote
 function chooseNote(e) {
     e.stopPropagation();
@@ -399,8 +417,8 @@ function chooseNote(e) {
     }
     setTimeout(() => {
         deleteTask.classList.remove("you_want_del_task");
-        this.classList.toggle("choosenNote");
-        this.lastElementChild.classList.toggle("choosenNoteAZ");
+        this.classList.remove("choosenNote");
+        this.lastElementChild.classList.remove("choosenNoteAZ");
     }, 10000);
 }
 
@@ -411,13 +429,6 @@ function refleshTask() {
         task = `note${i+1}`;
     });
 }
-// ! closeInfosNote
-function closeInfosNote(e) {
-    this.parentElement.parentElement.classList.add("close");
-    ombre.classList.remove("gener");
-    e.stopPropagation();
-}
-
 
 function showError(input) {
     input.className = 'theNoteText error';
@@ -571,11 +582,10 @@ function createColumn() {
 function refleshColumn() {
     const myColumns = document.querySelectorAll(".colonne");
     myColumns.forEach((col, i) => {
-        col.setAttribute("id", `col${ i + 1 }`);
-        col.firstElementChild.firstElementChild.innerHTML = `colonne${i+1}`;
-        // if (col.firstElementChild.firstElementChild.innerHTML === `colonne${i}`) {
-        //     col.firstElementChild.firstElementChild.innerHTML = `colonne${i+1}`;
-        // }
+        if (!col.classList.contains("modified")) {
+            col.setAttribute("id", `col${ i + 1 }`);
+            col.firstElementChild.firstElementChild.innerHTML = `colonne${i+1}`;
+        }
     });
 }
 
@@ -594,6 +604,9 @@ function modifierTitreColonne(e) {
         if (this.firstElementChild.innerHTML.trim() === "") {
             this.firstElementChild.innerHTML = textSiVide;
         }
+        if (textSiVide != this.firstElementChild.innerHTML) {
+            this.parentElement.classList.add("modified");
+        }
         e.target.parentElement.removeChild(e.target);
     });
 }
@@ -604,6 +617,13 @@ function selectTheColumn(e) {
     setTimeout(() => {
         this.classList.remove("selected");
     }, 10000);
+    const theChoosenColumns = document.querySelectorAll(".selected");
+
+    if (theChoosenColumns.length > 0) {
+        deleteColumn.classList.add("you_want_del_task");
+    } else {
+        deleteColumn.classList.remove("you_want_del_task");
+    }
 }
 // ! randomColor
 function randomColor() {
@@ -640,9 +660,16 @@ function deleteTheTask() {
         const nodeList = column.lastElementChild;
         if (nodeList.children.length != 0) {
             for (const notes of listsOfNotesSelected) {
-                nodeList.removeChild(notes);
+                const idParent = getIdParent(notes);
+                notes.setAttribute("data-colPaprent", idParent);
+                trashAside.lastElementChild.appendChild(notes);
                 indispoDelTask();
             }
         }
     });
+}
+
+function getIdParent(notes) {
+    const col = notes.parentElement.parentElement;
+    return col.id;
 }

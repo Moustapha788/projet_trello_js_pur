@@ -79,11 +79,10 @@ body {
 .ombre {
     position: fixed;
     top: 0;
-    bottom: 80%;
+    bottom: 0;
     left: 0;
     right: 0;
-    /* background-color: rgba(0, 0, 0, 0.246); */
-    background-color: rgba(255, 0, 0, 0.466);
+    background-color: rgba(0, 0, 0, 0.246);
     z-index: 10;
     display: none;
 }
@@ -157,6 +156,23 @@ body {
     background-color: crimson;
     overflow-x: hidden;
     overflow-y: auto;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(auto-fill, 20vh);
+    justify-content: center;
+    padding: 5% 1%;
+    row-gap: 70px;
+}
+
+.corbeille .choosenNote {
+    background-color: transparent!important;
+    border: none;
+}
+
+.corbeille .note small,
+.corbeille .note .iconsPara,
+.corbeille .note .overview tr:last-child {
+    display: none;
 }
 
 
@@ -241,7 +257,8 @@ div.auto_save {
 }
 
 div.auto_save label:first-child {
-    font-size: 1.5em;
+    font-size: 2em;
+    font-weight: bold;
 }
 
 div.auto_save label:last-child {
@@ -368,8 +385,8 @@ une tache est composée d'informations que sont:
     min-height: 75vh;
     border-radius: 5px;
     padding: 0.25%;
-    overflow-y: auto;
     overflow-x: hidden;
+    overflow-y: auto;
     /* une variable va intervenir en js backgroundColor  */
     background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.15)), url(/img/mon_logo_sans_fond.png) no-repeat center;
     border: 2px solid #fff;
@@ -445,6 +462,8 @@ une tache est composée d'informations que sont:
     align-items: center;
     position: relative;
     overflow: hidden;
+    animation: animate__backInLeft 0.5s ease-in-out;
+    animation: animate__backInRight 0.5s ease-in-out;
 }
 
 .ready_task {
@@ -590,6 +609,11 @@ p.iconsPara i {
     transition: transform 1s ease-in-out;
 }
 
+.voir_plus {
+    transform: translateY(102%);
+    transform: translateY(0);
+}
+
 .note:hover .overview {
     transform: translateY(0);
 }
@@ -672,6 +696,7 @@ tr:last-child td.etat.ready {
     box-shadow: 0 0 4px 8px rgba(0, 0, 0, 0.246);
     background-color: #201E20;
     display: none;
+    z-index: 50;
 }
 
 .close {
