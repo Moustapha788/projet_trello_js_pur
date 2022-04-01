@@ -294,6 +294,8 @@ function createTask() {
     IconsP.appendChild(btnArrowRight);
     btnArrowLeft.appendChild(arrowLeft);
     btnArrowRight.appendChild(arrowRight);
+    btnArrowRight.innerHTML += "R";
+    btnArrowLeft.innerHTML += "L";
     note.appendChild(overviewDiv);
 
     /* 
@@ -302,9 +304,59 @@ function createTask() {
     smallEdit.addEventListener("click", editTask);
     note.addEventListener("dblclick", chooseNote);
 
+    btnArrowLeft.addEventListener("click", movingTaskToLeft);
+    btnArrowRight.addEventListener("click", movingTaskToRight);
+
+
+
     return note;
 
 }
+
+function movingTaskToLeft(e) {
+    e.stopPropagation();
+    const thisNote = accessThisNote(e);
+    const thisColumn = thisNote.parentElement.parentElement;
+    let identifiant = parseTheId(thisColumn);
+    if (1 < identifiant && identifiant <= 5) {
+        identifiant--;
+        const previousColum = taskDashboard.querySelector(`#col${identifiant} `);
+        if (previousColum) {
+            previousColum.lastElementChild.appendChild(thisNote);
+        }
+    } else {
+        return false;
+    }
+    console.log(identifiant);
+}
+
+function movingTaskToRight(e) {
+    e.stopPropagation();
+    const thisNote = accessThisNote(e);
+    const thisColumn = thisNote.parentElement.parentElement;
+    let identifiant = parseTheId(thisColumn);
+
+    if (1 <= identifiant && identifiant < 5) {
+        identifiant++;
+        const nextColumn = taskDashboard.querySelector(`#col${identifiant}`);
+        if (nextColumn) {
+            nextColumn.lastElementChild.appendChild(thisNote);
+        }
+    } else {
+        return false;
+    }
+    console.log(identifiant);
+}
+
+function accessThisNote(e) {
+    return e.target.parentElement.parentElement;
+}
+
+function parseTheId(thisNote) {
+    let identifiant = parseInt(thisNote.id.replace("col", ""));
+    return identifiant;
+}
+
 
 function evoquerModal(e) {
     // const noteId = e.target.parentElement.parentElement;
@@ -319,6 +371,9 @@ function evoquerModal(e) {
     theFormControls[4].lastElementChild.value = donnees[3].innerHTML;
 
     modalInfo.classList.add("open");
+    btnSaveNote.addEventListener("click", () => {
+        // alert("ok");
+    });
 }
 
 function editTask(e) {
@@ -334,6 +389,8 @@ function editTask(e) {
 // ! chooseNote
 function chooseNote(e) {
     e.stopPropagation();
+    if (this.lastElementChild.firstElementChild.lastElementChild.firstElementChild.innerHTML === "terminée") { return false; }
+
     this.classList.toggle("choosenNote");
     this.lastElementChild.classList.toggle("choosenNoteAZ");
     const theChoosenNote = document.querySelectorAll(".choosenNote");
@@ -407,7 +464,6 @@ function testDate(planning) {
     const divContent = noteForm.querySelectorAll(".form-control");
 
     let cptErrorDate = 0;
-
     const beginYear = planning[1].slice(0, 4);
     const beginMonth = planning[1].slice(5, 7);
     const beginDay = planning[1].slice(8);
@@ -419,7 +475,6 @@ function testDate(planning) {
     const endDay = planning[3].slice(8);
     const hoursEnd = planning[4].slice(0, 2);
     const minEnd = planning[4].slice(3);
-
 
     const now = new Date();
     const timestampNow = now.getTime();
@@ -459,8 +514,6 @@ function testDate(planning) {
         divContent[4].lastElementChild.parentElement.firstElementChild.innerHTML = "";
 
     }
-    console.log("start", DateStart, DateStart.getTime());
-    console.log("end", DateEnd, DateEnd.getTime());
     return [cptErrorDate, `${DateEnd.getTime() - timestampNow}`];
 }
 

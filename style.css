@@ -448,7 +448,7 @@ une tache est composée d'informations que sont:
 }
 
 .ready_task {
-    background-color: gray!important;
+    background-color: black!important;
 }
 
 .choosenNote {
@@ -525,47 +525,49 @@ p.iconsPara {
 }
 
 p.iconsPara button {
+    padding: 5px;
     position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 p.iconsPara button:first-child {
     left: 25%;
-    animation: animLeft 5s infinite;
-    transition: all 10s ease;
+    /* animation: animLeft 10s infinite; */
 }
 
 @keyframes animLeft {
     from {
-        left: 25%;
+        left: 20%;
         opacity: 1;
     }
     to {
         left: 0;
-        opacity: 0;
+        opacity: 0.8;
     }
 }
 
 p.iconsPara button:last-child {
-    right: 25%;
-    animation: animRight 5s infinite;
-    transition: all 10s ease;
+    right: 20%;
+    /* animation: animRight 10s infinite; */
 }
 
 @keyframes animRight {
     from {
-        right: 25%;
+        right: 20%;
         opacity: 1;
     }
     to {
         right: 0;
-        opacity: 0;
+        opacity: 0.8;
     }
 }
 
 p.iconsPara i {
     color: teal;
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
 }
 
 .overview {
@@ -631,15 +633,17 @@ td.etat {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: none;
+    background: crimson!important;
+    font-size: 1.75em!important;
+    font-weight: bold;
 }
 
 tr:last-child td.etat.en_cours {
-    color: gray!important;
+    color: var(--success-color)!important;
 }
 
 tr:last-child td.etat.ready {
-    color: var(--success-color)!important;
+    color: #fff!important;
 }
 
 
