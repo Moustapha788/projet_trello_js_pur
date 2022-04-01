@@ -1,0 +1,84 @@
+<!-- menu  des cartes -->
+<div id="nav-task">
+    <button class="btn-add" id="add-Column">
+        <span>Ajouter une colonne</span> 
+        <span><i class="fa-solid fa-plus"></i></span>
+    </button>
+    <button class="btn-add" id="add-Task">
+        <span>Ajouter une note</span>
+        <span><i class="fa-solid fa-plus"></i></span>
+    </button>
+    <button class="btn-add" id="delete-Column">
+        <span>Supprimer une colonne </span>
+        <span><i class="fa-solid fa-trash-can"></i></span>
+    </button>
+    <button class="btn-add" id="delete-task">
+        <span>Supprimer une note</span>
+        <span><i class="fa-solid fa-trash-can"></i></span>
+    </button>
+</div>
+<!-- les cartes vont être dans cette section  -->
+<section id="task-dashboard">
+
+</section>
+
+
+
+
+<!-- * une colonne -->
+<div class="colonne bgcolor">
+    <!-- * une titre de colonne -->
+    <h1 class="title-col">
+        <marquee behavior="alternate" direction="">colonne 1 </marquee>
+    </h1>
+    <!-- * liste de notes -->
+    <aside class="liste-des-notes">
+        <!-- * une note  -->
+        <div class="note">
+            <p class="title-note">une tâche</p>
+            <article class="note-information">
+                <div class="info-title-note">
+                    <h1>Note</h1>
+                    <span class="btn-close-note"><i class="fa-solid fa-xmark fa-4x"></i></span>
+                </div>
+                <form action="" class="note-form">
+                    <div class="form-control">
+                        <label for="">Tâche</label>
+                        <textarea name="" id="" class="theNoteText"></textarea>
+                    </div>
+
+                    <div class="form-control">
+                        <label for="">Date</label>
+                        <input type="date">
+                    </div>
+                    <div class="form-control">
+                        <label for="">Heure de Début</label>
+                        <input type="time">
+                    </div>
+                    <div class="form-control">
+                        <label for="">Heure de Fin</label>
+                        <input type="date">
+                    </div>
+                    <button type="submit" class="btnSaveNote"> Ajouter</button>
+                </form>
+            </article>
+
+        </div>
+    </aside>
+</div>
+
+
+
+
+
+
+const theTwoContent = createThePrincipalDOM(); theTwoContent.forEach(elt => main.appendChild(elt)); function createThePrincipalDOM() { /* création des éléments */ const navTaskDiv = document.createElement("div"); const btnAddColumn = document.createElement("button");
+const btnAddTask = document.createElement("button"); const btnDelColumn = document.createElement("button"); const btnDelTask = document.createElement("button"); const span1AddColumn = document.createElement("span"); const span2AddColumn = document.createElement("span");
+const span1AddTask = document.createElement("span"); const span2AddTask = document.createElement("span"); const span1DelColumn = document.createElement("span"); const span2DelColumn = document.createElement("span"); const span1DelTask = document.createElement("span");
+const span2DelTask = document.createElement("span"); const iAddCol = document.createElement("i"); const iAddTask = document.createElement("i"); const iDelCol = document.createElement("i"); const iDelTask = document.createElement("i"); const taskDashboard
+= document.createElement('section'); /* ajout de style (attributs class et id) */ navTaskDiv.setAttribute("id", "nav-task"); [btnAddColumn, btnAddTask, btnDelColumn, btnDelTask].forEach(btn => btn.className = "btn-add"); btnAddColumn.setAttribute("id",
+"add-Column"); btnAddTask.setAttribute("id", "add-Task"); btnDelColumn.setAttribute("id", "delete-Column"); btnDelTask.setAttribute("id", "delete-task"); span1AddColumn.innerHTML = "Ajouter une colonne"; span1AddTask.innerHTML = "Ajouter une note"; span1DelColumn.innerHTML
+= "Supprimer une colonne"; span1DelTask.innerHTML = "Supprimer une note"; [iAddCol, iAddTask, iDelCol, iDelTask].forEach(icon => icon.className = "fa-solid"); [iAddCol, iAddTask].forEach(iconPlus => iconPlus.className += " fa-plus"); [iDelCol, iDelTask].forEach(iconPlus
+=> iconPlus.className += " fa-trash-can"); taskDashboard.setAttribute("id", "task-dashboard"); /* liens parents fils */ [btnAddColumn, btnAddTask, btnDelColumn, btnDelTask].forEach(btn => navTaskDiv.appendChild(btn)); [span1AddColumn, span2AddColumn].forEach(span
+=> btnAddColumn.appendChild(span)); [span1AddTask, span2AddTask].forEach(span => btnAddTask.appendChild(span)); [span1DelColumn, span2DelColumn].forEach(span => btnDelColumn.appendChild(span)); [span1DelTask, span2DelTask].forEach(span => btnDelTask.appendChild(span));
+span2AddColumn.appendChild(iAddCol); span2AddTask.appendChild(iAddTask); span2DelColumn.appendChild(iDelCol); span2DelTask.appendChild(iDelTask); return [navTaskDiv, taskDashboard]; }

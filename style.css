@@ -1,0 +1,835 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+:root {
+    --primary-color: rgb(52, 73, 94);
+    --secondary-color: rgb(241, 196, 15);
+    --green-color: rgb(46, 204, 113);
+    --blue-marine: rgb(0, 86, 202);
+    --green-menthe: rgb(19, 138, 138);
+    --blue-color: rgb(52, 152, 219);
+    --midnight-blue: rgb(44, 62, 80);
+    --alizarin: rgb(231, 76, 60);
+    --trello-color: #3C6C7A;
+    --success-color: #2ecc71;
+    --error-color: #e74c3c;
+}
+
+*,
+::after,
+::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+button,
+input,
+textarea {
+    border: none;
+    background: none;
+    outline: none;
+    cursor: pointer;
+}
+
+label {
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#downDOM {
+    width: 80px;
+    height: 70px;
+    padding: 10px 5px 0;
+    border-radius: 0 0 5px 5px;
+    background-color: rgba(255, 255, 255, 0.25);
+    position: fixed;
+    top: 0;
+    left: 50%;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: #fff;
+    transition: all 0.5s ease;
+}
+
+#downDOM.showDOM {
+    transform: translate(-50%, 0);
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    font-family: 'Open Sans', 'Ubuntu', sans-serif;
+    overflow: hidden;
+    background: url(img/back.jpg);
+    background-size: cover;
+}
+
+.ombre {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.246);
+    z-index: 10;
+    display: none;
+}
+
+.gener {
+    display: block!important;
+}
+
+
+/* trash can */
+
+#trash-aside {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 25rem;
+    border-left: 2px solid #fff;
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(100%);
+    transition: all 0.7s ease-in-out;
+}
+
+.showTrashAside {
+    transform: translateX(0)!important;
+}
+
+#btn-trash {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    color: #fff;
+    border-left: 2px solid crimson;
+    top: 0;
+    left: 0;
+    transform: translateX(-30px);
+    display: flex;
+    align-items: center;
+    background-color: crimson;
+}
+
+#btn-trash i {
+    transition: all 2s ease-in-out;
+    color: #fff;
+}
+
+.side-right-trash {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.side-right-trash h1 {
+    width: 100%;
+    height: 120px;
+    font-size: 30px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    color: crimson;
+    padding: 1% 0;
+}
+
+.corbeille {
+    width: 100%;
+    height: calc(100vh - 120px);
+    background-color: crimson;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(auto-fill, 20vh);
+    justify-content: center;
+    padding: 5% 1%;
+    row-gap: 70px;
+}
+
+.corbeille .choosenNote {
+    background-color: transparent!important;
+    border: none;
+}
+
+.corbeille .note small,
+.corbeille .note .iconsPara,
+.corbeille .note .overview tr:last-child {
+    display: none;
+}
+
+
+/* mainNav */
+
+#main-nav {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 25rem;
+    border-right: 2px double #fff;
+    background-color: rgb(183, 21, 64);
+    transform: translateX(-101%);
+    transition: all 0.7s ease-in-out;
+}
+
+.showMainNav {
+    transform: translateX(0)!important;
+}
+
+#btn-main-nav {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 0 5px 5px 0;
+    border: 2px solid #fff;
+    border-left: none;
+    background-color: #fff;
+    color: crimson;
+    border-left: none;
+    top: 0.5%;
+    right: 0;
+    transform: translateX(99.5%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.side-nav-content {
+    display: flex;
+    flex-direction: column;
+    padding: 2% 0;
+}
+
+.fonctionnalite {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    color: crimson;
+    background-color: #fff;
+    padding: 2%;
+    height: auto;
+    margin: 2% 0;
+}
+
+.fonctionnalite:hover {
+    color: var(--trello-color);
+}
+
+.fonctionnalite span {
+    margin: 0 2%;
+}
+
+.fonctionnalite p {
+    font-size: 1.75em;
+    font-weight: bold;
+    margin: 0 2%;
+}
+
+div.auto_save {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 10vh;
+    padding: 2% 5%;
+    background-color: rgb(30, 39, 46);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+div.auto_save label:first-child {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+div.auto_save label:last-child {
+    /* font-size: 1.5em; */
+    width: 4rem;
+    height: 2rem;
+    padding: 2px;
+    border-radius: 2rem;
+    background-color: crimson;
+    transition: all 0.5s;
+}
+
+div.auto_save label:last-child::before {
+    box-sizing: border-box;
+    display: block;
+    content: "";
+    height: calc(2rem - 4px);
+    width: calc(2rem - 4px);
+    border-radius: 50%;
+    background-color: #fff;
+    transition: all 0.5s;
+}
+
+input#autosave:checked+label {
+    background-color: rgb(46, 204, 113);
+}
+
+input#autosave:checked+label::before {
+    margin-left: 2rem;
+}
+
+div.auto_save input#autosave {
+    width: 0;
+    height: 0;
+    position: absolute;
+    left: -15000px;
+}
+
+
+/* header */
+
+#header {
+    width: 100%;
+    height: 10vh;
+    max-height: 10vh;
+}
+
+#main {
+    width: 100%;
+    height: 90vh;
+    transform: translateY(-120%);
+    transition: all 1s ease-in-out;
+}
+
+.pendule {
+    transform: translateY(0)!important;
+}
+
+#nav-task {
+    height: 10vh;
+    border-bottom: 1px solid #fff;
+    display: flex;
+    padding: 1% 2%;
+}
+
+#add-Column:hover,
+#add-Task:hover {
+    background-color: var(--green-color);
+}
+
+#delete-Column:hover,
+#delete-task:hover {
+    background-color: crimson;
+}
+
+.you_want_del_task {
+    background-color: crimson!important;
+}
+
+.btn-add {
+    width: 15em;
+    height: 90%;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 0 1%;
+    padding: 1%;
+    border-radius: 5px;
+    font-size: 1.5em;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.indisponible {
+    display: none;
+}
+
+#task-dashboard {
+    height: 80vh;
+    padding: 1%;
+    overflow-y: hidden;
+    overflow-x: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 350px);
+    grid-template-rows: auto;
+    column-gap: 1%;
+    justify-content: center;
+}
+
+
+/* 
+une colonne est composée d'un titre et de tâches 
+une tache est composée d'informations que sont:
+    le texte de la note
+    la date de début 
+    la date d'espiration
+*/
+
+
+/* column */
+
+.colonne {
+    max-width: 350px;
+    min-height: 75vh;
+    border-radius: 5px;
+    padding: 0.25%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* une variable va intervenir en js backgroundColor  */
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.15)), url(/img/mon_logo_sans_fond.png) no-repeat center;
+    border: 2px solid #fff;
+    color: antiquewhite;
+    background-position-y: 75%;
+    background-size: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 1s ease-in-out;
+    animation: animate__backInDown 0.5s ease-in-out;
+}
+
+.animate__backInDown {
+    transition: all 1s ease-in-out;
+}
+
+.selected {
+    background-color: red!important;
+    border-style: dashed;
+}
+
+.modificationColonne {
+    min-width: 100%;
+    font-size: inherit;
+    text-align: left;
+    text-transform: capitalize;
+    color: crimson;
+}
+
+.title-col {
+    position: sticky;
+    top: 1%;
+    background-color: rgba(255, 255, 255, 0.678);
+    color: var(--green-menthe);
+    font-size: 1.75em;
+    font-weight: bold;
+    margin: 2%;
+    padding: 2%;
+    min-height: 7vh;
+    width: 98%;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+
+/* note */
+
+.liste-des-notes {
+    width: 100%;
+    padding: 2% 1%;
+    min-height: 85%;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.note {
+    max-width: 340px;
+    min-width: 320px;
+    height: auto;
+    min-height: 25vh;
+    border: 2px solid var(--green-menthe);
+    margin: 2% 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    animation: animate__backInLeft 0.5s ease-in-out;
+    animation: animate__backInRight 0.5s ease-in-out;
+}
+
+.ready_task {
+    background-color: black!important;
+}
+
+.choosenNote {
+    background: red!important;
+    border-style: dashed;
+    border-color: #fff;
+}
+
+.choosenNoteAZ {
+    z-index: -1!important;
+}
+
+.tenu {
+    border: 2px solid #ccc;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.ajout {
+    border-style: dashed;
+}
+
+.grise {
+    background-color: rgba(128, 128, 128, 0.555);
+}
+
+.title-note {
+    width: 100%;
+    background: none;
+    height: 100%;
+    min-height: 20vh;
+    padding: 25px 2% 1%;
+    cursor: pointer;
+    color: cornsilk;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: justify;
+    overflow-y: auto;
+}
+
+.note small {
+    position: absolute;
+    right: 2%;
+    bottom: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    z-index: 25;
+}
+
+p.iconsPara {
+    width: 100%;
+    min-width: 100%;
+    height: 6vh;
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-50%);
+    left: 50%;
+    z-index: 10;
+    padding: 0 3%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.unavailable {
+    display: none!important;
+}
+
+p.iconsPara button {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    z-index: 20;
+}
+
+p.iconsPara button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+p.iconsPara button:first-child {
+    left: 15%;
+    /* animation: animBtn 1s infinite; */
+}
+
+p.iconsPara button:last-child {
+    right: 15%;
+    /* animation: animBtn 1s infinite; */
+}
+
+.colonne:first-child p.iconsPara button:first-child {
+    display: none;
+}
+
+.colonne:last-child p.iconsPara button:last-child {
+    display: none;
+}
+
+@keyframes animBtn {
+    from {
+        left: 20%;
+        opacity: 1;
+    }
+    to {
+        left: 0;
+        opacity: 0.8;
+    }
+}
+
+p.iconsPara i {
+    color: teal;
+    width: 90%;
+    height: 90%;
+}
+
+.overview {
+    position: absolute;
+    bottom: 0;
+    max-height: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    transform: translateY(102%);
+    z-index: 8;
+    transition: transform 1s ease-in-out;
+}
+
+.voir_plus {
+    transform: translateY(102%);
+    transform: translateY(0);
+}
+
+.note:hover .overview {
+    transform: translateY(0);
+}
+
+.note table {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    background-color: rgb(19, 15, 64);
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(auto-fill, 4vh);
+    align-content: center;
+    row-gap: 5px;
+}
+
+tr.ligne {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    padding: 1%;
+}
+
+tr.ligne td {
+    font-size: 1.2em;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: rgb(250, 130, 49);
+    padding: 1%;
+    font-weight: bold!important;
+}
+
+tr:last-child td {
+    background: none;
+}
+
+.note th {
+    width: 65%;
+    text-align: left;
+    font-size: 1.5em;
+    color: #fff;
+}
+
+td.etat {
+    width: 100%;
+    height: 100%;
+    min-height: 4vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: crimson!important;
+    font-size: 1.75em!important;
+    font-weight: bold;
+}
+
+tr:last-child td.etat.en_cours {
+    color: var(--success-color)!important;
+}
+
+tr:last-child td.etat.ready {
+    color: #fff!important;
+}
+
+
+/* 
+.note-information
+*/
+
+.note-information {
+    position: fixed;
+    top: 2%;
+    left: 50%;
+    transform: translate(-50%);
+    width: 70rem;
+    padding: 5px 5px 10px;
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid #fff;
+    box-shadow: 0 0 4px 8px rgba(0, 0, 0, 0.246);
+    background-color: #201E20;
+    display: none;
+    z-index: 50;
+}
+
+.close {
+    display: none;
+}
+
+.open {
+    display: block!important;
+}
+
+.info-title-note {
+    width: 100%;
+    height: 10vh;
+    max-height: 10vh;
+    padding: 1% 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 5px 5px 0 0;
+    background-color: #fff;
+    color: crimson;
+}
+
+.info-title-note h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.btn-close-note {
+    cursor: pointer;
+}
+
+
+/*
+note-form
+*/
+
+.note-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2%;
+    max-height: 100%;
+    color: #fff;
+}
+
+.form-control {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 1% 0;
+    position: relative;
+}
+
+.theNoteText.success {
+    border: 2px solid var(--success-color)!important;
+}
+
+.theNoteText.error {
+    border: 2px solid crimson;
+    animation: clignote 0.5s alternate infinite;
+}
+
+@keyframes clignote {
+    from {
+        border-color: transparent;
+    }
+    to {
+        border-color: crimson;
+    }
+}
+
+.red-color {
+    color: crimson;
+}
+
+.form-control span {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.theNoteText {
+    width: 100%;
+    height: 7vh;
+    border: 1px solid;
+    color: #fff;
+    font-size: 20px;
+    padding: 10px;
+    cursor: default;
+    vertical-align: middle;
+}
+
+.form-control input {
+    width: 100%;
+    padding: 2% 0;
+    font-size: 2em;
+    border: 1px solid;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.form-control textarea {
+    border-radius: 5px;
+    padding: 1% 0!important;
+    resize: none;
+    text-indent: 5px;
+    height: 15vh;
+}
+
+.form-control label {
+    font-family: 'Helvetica', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #E0A96D;
+    cursor: pointer;
+}
+
+.btnSaveNote {
+    width: 100%;
+    background-color: rgb(128, 128, 128);
+    padding: 2%;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1.75em;
+    color: #fff;
+    margin: 5px 0 0;
+}
+
+.btnSaveNote:hover {
+    background-color: var(--green-color);
+}

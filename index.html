@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet trello clone</title>
+    <!-- ! lien css _ animation et _ font-awesome  -->
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+</head>
+
+<body>
+    <!-- * ombre -->
+    <p class="ombre"></p>
+
+    <!-- header -->
+    <button id="downDOM"><i class="fa-solid fa-chevron-down fa-4x"></i></button>
+    <header id="header">
+
+    </header>
+    <!-- main -->
+    <main id="main">
+        <!-- menu  des cartes -->
+        <div id="nav-task">
+            <button class="btn-add" id="add-Column">
+                <span>Ajouter une colonne</span>
+                <span><i class="fa-solid fa-plus"></i></span>
+            </button>
+            <button class="btn-add" id="add-Task">
+                <span>Ajouter une note</span>
+                <span><i class="fa-solid fa-plus"></i></span>
+            </button>
+            <button class="btn-add" id="delete-Column">
+                <span>Supprimer une colonne </span>
+                <span><i class="fa-solid fa-trash-can"></i></span>
+            </button>
+            <button class="btn-add" id="delete-task">
+                <span>Supprimer une note</span>
+                <span><i class="fa-solid fa-trash-can"></i></span>
+            </button>
+        </div>
+        <!-- les cartes vont être dans cette section  -->
+        <section id="task-dashboard">
+
+        </section>
+
+    </main>
+    <!-- side nav  -->
+    <nav id="main-nav">
+        <!-- bouton  d'ouverture et de fermetture du side nav    -->
+        <button id="btn-main-nav">
+            <i class="fa-solid fa-bars fa-4x"></i>
+        </button>
+        <!-- side nav content -->
+        <div class="side-nav-content ">
+            <a href="#" class="fonctionnalite">
+                <span><i class="fa-solid fa-floppy-disk fa-3x"></i></span>
+                <p>Sauvegarder état Trello</p>
+            </a>
+            <a href="#" class="fonctionnalite">
+                <span><i class="fa-solid fa-list-check fa-3x"></i></span>
+                <p>Lister les états</p>
+            </a>
+            <div class="auto_save">
+                <label for="autosave"><span><i class="fa-solid fa-cloud-arrow-up"></i></span> <span>Auto-save</span></label>
+                <input type="checkbox" name="autosave" id="autosave">
+                <label for="autosave"></label>
+            </div>
+        </div>
+    </nav>
+    <aside id="trash-aside">
+        <!-- bouton  d'ouverture et de fermetture de la partie corbeilles    -->
+        <button id="btn-trash">
+            <i class="fa-solid fa-chevron-left fa-4x"></i>
+        </button>
+        <div class="side-right-trash">
+            <h1>
+                <small><i class="fa-solid fa-trash-can fa-2x"></i></small>
+                <small>Corbeille</small>
+            </h1>
+        </div>
+        <section class="corbeille">
+        </section>
+    </aside>
+    <article class="note-information" id="modal_info">
+        <div class="info-title-note">
+            <h1>Votre tâche</h1>
+            <span class="btn-close-note"><i class="fa-solid fa-xmark fa-4x"></i></span>
+        </div>
+        <form action="" class="note-form">
+            <div class="form-control">
+                <span class="red-color"></span>
+                <label for="">Tâche</label>
+                <textarea name="" id="" value="" class="theNoteText"></textarea>
+            </div>
+
+            <div class="form-control">
+                <span class="red-color"></span>
+                <label for="">Date de début</label>
+                <input type="date" value="" class="theNoteText">
+            </div>
+            <div class="form-control">
+                <span class="red-color"></span>
+                <label for="">Heure de Début</label>
+                <input type="time" value="" class="theNoteText ">
+            </div>
+            <div class="form-control">
+                <span class="red-color"></span>
+                <label for="">Date limite</label>
+                <input type="date" value="" class="theNoteText">
+            </div>
+            <div class="form-control">
+                <span class="red-color"></span>
+                <label for="">Heure de Fin</label>
+                <input type="time" value="" class="theNoteText">
+            </div>
+            <button type="button" class="btnSaveNote"> Ajouter</button>
+        </form>
+    </article>
+    <!-- ! lien js -->
+    <script defer src="script.js"></script>
+</body>
+
+</html>
