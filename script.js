@@ -294,8 +294,8 @@ function createTask() {
     IconsP.appendChild(btnArrowRight);
     btnArrowLeft.appendChild(arrowLeft);
     btnArrowRight.appendChild(arrowRight);
-    btnArrowRight.innerHTML += "R";
-    btnArrowLeft.innerHTML += "L";
+    // btnArrowRight.innerHTML += "R";
+    // btnArrowLeft.innerHTML += "L";
     note.appendChild(overviewDiv);
 
     /* 
@@ -307,14 +307,12 @@ function createTask() {
     btnArrowLeft.addEventListener("click", movingTaskToLeft);
     btnArrowRight.addEventListener("click", movingTaskToRight);
 
-
-
     return note;
 
 }
 
 function movingTaskToLeft(e) {
-    e.stopPropagation();
+    // e.stopPropagation();
     const thisNote = accessThisNote(e);
     const thisColumn = thisNote.parentElement.parentElement;
     let identifiant = parseTheId(thisColumn);
@@ -327,11 +325,10 @@ function movingTaskToLeft(e) {
     } else {
         return false;
     }
-    console.log(identifiant);
 }
 
 function movingTaskToRight(e) {
-    e.stopPropagation();
+    // e.stopPropagation();
     const thisNote = accessThisNote(e);
     const thisColumn = thisNote.parentElement.parentElement;
     let identifiant = parseTheId(thisColumn);

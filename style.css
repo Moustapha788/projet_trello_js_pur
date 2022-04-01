@@ -514,7 +514,7 @@ p.iconsPara {
     transform: translateX(-50%);
     left: 50%;
     z-index: 10;
-    padding: 0 5%;
+    padding: 0 3%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -525,41 +525,49 @@ p.iconsPara {
 }
 
 p.iconsPara button {
-    padding: 5px;
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 60px;
+    height: 60px;
+    z-index: 20;
+}
+
+p.iconsPara button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 p.iconsPara button:first-child {
-    left: 25%;
-    /* animation: animLeft 10s infinite; */
+    left: 15%;
+    /* animation: animBtn 1s infinite; */
 }
 
-@keyframes animLeft {
+p.iconsPara button:last-child {
+    right: 15%;
+    /* animation: animBtn 1s infinite; */
+}
+
+.colonne:first-child p.iconsPara button:first-child {
+    display: none;
+}
+
+.colonne:last-child p.iconsPara button:last-child {
+    display: none;
+}
+
+@keyframes animBtn {
     from {
         left: 20%;
         opacity: 1;
     }
     to {
         left: 0;
-        opacity: 0.8;
-    }
-}
-
-p.iconsPara button:last-child {
-    right: 20%;
-    /* animation: animRight 10s infinite; */
-}
-
-@keyframes animRight {
-    from {
-        right: 20%;
-        opacity: 1;
-    }
-    to {
-        right: 0;
         opacity: 0.8;
     }
 }
