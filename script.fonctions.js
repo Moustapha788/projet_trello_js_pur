@@ -546,3 +546,15 @@ function getIdParent(notes) {
     const col = notes.parentElement.parentElement;
     return col.id;
 }
+
+// ! getDataWithFetch
+async function getDataWithFetch(url) {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        return error.message;
+    }
+}

@@ -22,7 +22,7 @@ const deleteColumn = document.getElementById('delete-Column');
 const deleteTask = document.getElementById('delete-task');
 const taskDashboard = document.getElementById('task-dashboard');
 const trashAside = document.querySelector("#trash-aside");
-// const listeDesNotes = document.querySelectorAll(".liste-des-notes");
+const chemin = "http://127.0.0.1:5500/data/db.json";
 const tabColors = [
     "rgb(52, 73, 94)",
     "rgb(241, 196, 15)",
@@ -137,3 +137,7 @@ deleteColumn.addEventListener('click', deleteTheColumn);
 supprimer une note 
 */
 deleteTask.addEventListener('click', deleteTheTask);
+
+
+// asynchrous function who gets data
+getDataWithFetch(chemin);
