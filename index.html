@@ -8,9 +8,9 @@
     <title>Projet trello clone</title>
     <!-- ! lien css _ animation et _ font-awesome  -->
     <link rel="stylesheet" href="reset.css">
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -57,7 +57,7 @@
             <i class="fa-solid fa-bars fa-4x"></i>
         </button>
         <!-- side nav content -->
-        <div class="side-nav-content ">
+        <div class="side-nav-content">
             <a href="#" class="fonctionnalite">
                 <span><i class="fa-solid fa-floppy-disk fa-3x"></i></span>
                 <p>Sauvegarder état Trello</p>
@@ -119,11 +119,13 @@
                 <label for="">Heure de Fin</label>
                 <input type="time" value="" class="theNoteText">
             </div>
-            <button type="button" class="btnSaveNote"> Ajouter</button>
+            <button type="button" class="btnSaveNote">Ajouter</button>
+            <button type="button" class="btnEditNote">Enregistrer</button>
         </form>
     </article>
     <!-- ! lien js -->
-    <script defer src="script.js"></script>
+    <script src="script.fonctions.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
